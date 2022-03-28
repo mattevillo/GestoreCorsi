@@ -6,10 +6,12 @@ package it.polito.tdp.corsi;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.corsi.model.Corso;
 import it.polito.tdp.corsi.model.Model;
+import it.polito.tdp.corsi.model.Studente;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -68,13 +70,31 @@ public class FXMLController {
     	
     	for(Corso c: corsi) {
     		txtRisultato.appendText(c +"\n");
-    	}
-    	
+    	}	
     }
 
     @FXML
     void numeroStudenti(ActionEvent event) {
+    	txtRisultato.clear();
     	
+    	String periodo= txtPeriodo.getText();
+    	int periodoNumerico;
+    	try {
+    		periodoNumerico= Integer.parseInt(periodo);
+    		
+    	} catch(NumberFormatException e) {
+    		e.printStackTrace();
+    		return;
+    	}
+    	
+    	if (periodoNumerico <1 || periodoNumerico >2)
+    		txtRisultato.setText("Inserisci 1 o 2");
+    	
+    	Map<Corso,Integer> iscritti = this.model.getIscritti(periodoNumerico);
+    	
+    	 for (Corso c: iscritti.keySet()) {
+    		 txtRisultato.appendText(c + " "+iscritti.get(c)+"\n");
+    	 }	
     }
 
     @FXML
@@ -84,6 +104,19 @@ public class FXMLController {
 
     @FXML
     void stampaStudenti(ActionEvent event) {
+    	txtRisultato.clear();
+    	String codins = txtCorso.getText();
+    	
+    	if(codins==null || codins.equals("")) {
+    		txtRisultato.appendText("Per favore inserisci il codice di un corso");
+    		return;
+    	}
+    	
+    	//TODO Controllo che il corso esista
+    	
+    	for (Studente s: this.model.getStudentibyCorso(codins)) {
+    		txtRisultato.appendText(s + "\n");
+    	}
 
     }
 
