@@ -33,5 +33,8 @@ public class Model {
 		
 	}
 
+	public List<Divisione> getDivisioneStudenti(String codins){
+		return this.studenteDAO.getDivisioneStudenti(codins);
+	}
 	
 }
